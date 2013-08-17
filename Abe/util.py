@@ -5,6 +5,7 @@
 import re
 import base58
 import Crypto.Hash.SHA256 as SHA256
+from quark_hash import getPoWHash
 
 try:
     import Crypto.Hash.RIPEMD160 as RIPEMD160
@@ -36,6 +37,9 @@ def short_hex(bytes):
 def double_sha256(s):
     return SHA256.new(SHA256.new(s).digest()).digest()
 
+def quark_hash(s):
+    return getPoWHash(s) 	
+	
 # Based on CBlock::BuildMerkleTree().
 def merkle(hashes):
     while len(hashes) > 1:
@@ -56,7 +60,7 @@ def block_hash(block):
     ds.write_uint32(block['nTime'])
     ds.write_uint32(block['nBits'])
     ds.write_uint32(block['nNonce'])
-    return double_sha256(ds.input)
+    return quark_hash(ds.input)
 
 def pubkey_to_hash(pubkey):
     return RIPEMD160.new(SHA256.new(pubkey).digest()).digest()
@@ -64,8 +68,9 @@ def pubkey_to_hash(pubkey):
 def calculate_target(nBits):
     return (nBits & 0xffffff) << (8 * ((nBits >> 24) - 3))
 
+# quarkcoins diff is 256 off, so its 232 and NOT 224!!!	
 def target_to_difficulty(target):
-    return ((1 << 224) - 1) * 1000 / (target + 1) / 1000.0
+    return ((1 << 232) - 1) * 1000 / (target + 1) / 1000.0
 
 def calculate_difficulty(nBits):
     return target_to_difficulty(calculate_target(nBits))

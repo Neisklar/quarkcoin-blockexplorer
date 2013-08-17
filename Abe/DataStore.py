@@ -56,22 +56,8 @@ CONFIG_DEFAULTS = {
 WORK_BITS = 304  # XXX more than necessary.
 
 CHAIN_CONFIG = [
-    {"chain":"Bitcoin",
-     "code3":"BTC", "address_version":"\x00", "magic":"\xf9\xbe\xb4\xd9"},
-    {"chain":"Testnet",
-     "code3":"BC0", "address_version":"\x6f", "magic":"\xfa\xbf\xb5\xda"},
-    {"chain":"Namecoin",
-     "code3":"NMC", "address_version":"\x34", "magic":"\xf9\xbe\xb4\xfe"},
-    {"chain":"Weeds", "network":"Weedsnet",
-     "code3":"WDS", "address_version":"\xf3", "magic":"\xf8\xbf\xb5\xda"},
-    {"chain":"BeerTokens",
-     "code3":"BER", "address_version":"\xf2", "magic":"\xf7\xbf\xb5\xdb"},
-    {"chain":"SolidCoin",
-     "code3":"SCN", "address_version":"\x7d", "magic":"\xde\xad\xba\xbe"},
-    {"chain":"ScTestnet",
-     "code3":"SC0", "address_version":"\x6f", "magic":"\xca\xfe\xba\xbe"},
-    #{"chain":"",
-    # "code3":"", "address_version":"\x", "magic":""},
+    {"chain":"Quarkcoin",
+     "code3":"QRK", "address_version":"\x3a", "magic":"\xfe\xa5\x03\xdd"},
     ]
 
 NULL_HASH = "\0" * 32
@@ -2279,7 +2265,7 @@ store._ddl['txout_approx'],
             store.import_tx(tx, util.is_coinbase_tx(tx))
             store.imported_bytes(tx['size'])
 
-    def export_tx(store, tx_id=None, tx_hash=None, decimals=8, format="api"):
+    def export_tx(store, tx_id=None, tx_hash=None, decimals=5, format="api"):
         """Return a dict as seen by /rawtx or None if not found."""
 
         tx = {}
@@ -2658,7 +2644,7 @@ store._ddl['txout_approx'],
         chain_ids = frozenset([chain_id])
 
         conffile = dircfg.get("conf",
-                              os.path.join(dircfg['dirname'], "bitcoin.conf"))
+                              os.path.join(dircfg['dirname'], "quarkcoin.conf"))
         try:
             conf = dict([line.strip().split("=", 1)
                          if "=" in line
@@ -3011,7 +2997,7 @@ store._ddl['txout_approx'],
                 break
             end = ds.read_cursor + length
 
-            hash = util.double_sha256(
+            hash = util.quark_hash(
                 ds.input[ds.read_cursor : ds.read_cursor + 80])
             # XXX should decode target and check hash against it to
             # avoid loading garbage data.  But not for merged-mined or

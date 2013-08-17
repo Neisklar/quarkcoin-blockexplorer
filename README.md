@@ -1,3 +1,8 @@
+Quarkcoin block chain browser
+https://github.com/Neisklar/quarkcoin-blockexplorer
+
+This work is a fork of Abe, modified for Quarkcoin by Neisklar:
+
 Abe: a free block chain browser for Bitcoin-based currencies.
 https://github.com/jtobey/bitcoin-abe
 
